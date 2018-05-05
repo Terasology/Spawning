@@ -15,5 +15,8 @@
  */
 package org.terasology.spawning;
 
-public class IsSpawnedComponent {
+import org.terasology.entitySystem.Component;
+
+public class IsSpawnedComponent implements Component {
+
 }

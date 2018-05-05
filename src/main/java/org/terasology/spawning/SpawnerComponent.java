@@ -18,6 +18,7 @@ package org.terasology.spawning;
 import org.terasology.entitySystem.Component;
 
 import com.google.common.collect.Lists;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.world.block.ForceBlockActive;
 
 import java.util.List;
@@ -45,10 +46,12 @@ public class SpawnerComponent implements Component {
     public boolean rangedSpawning;
 
     public int range = 20;
-    public int minDistance;
+    public int minDistance = 1;
     
     public boolean needsPlayer;
 
     public int playerNeedRange = 10000;
+
+    public Prefab requiredPrefab;
     
 }
