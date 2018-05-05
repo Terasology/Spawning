@@ -36,7 +36,6 @@ import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
-import org.terasology.logic.ai.SimpleAIComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 //import org.terasology.logic.inventory.SlotBasedInventoryManager;
 import org.terasology.logic.location.LocationComponent;
@@ -97,16 +96,6 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
     public void initialise() {
         cacheTypes();
     }
-
-    /*public Prefab getRequiredPrefab(Set randomType, SpawnerComponent spawnerComponent) {
-        if(spawnerComponent.requiredPrefab != null) {
-            return spawnerComponent.requiredPrefab;
-        }
-        int anotherRandomIndex = random.nextInt(randomType.size());
-        Object[] randomPrefabs = randomType.toArray();
-        return (Prefab) randomPrefabs[anotherRandomIndex];
-
-    }*/
 
     /**
      * Looks through all loaded prefabs and determines which are spawnable, then stores them in a local SetMultimap
@@ -181,7 +170,7 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
      */
     // TODO: Switch away from UpdateSubScriberSystem to the DelaySystem and handle tick "throttle" there. Then simplify
     public void update(float delta) {
-/*        // Do a time check to see if we should even bother calculating stuff (really only needed every second or so)
+        // Do a time check to see if we should even bother calculating stuff (really only needed every second or so)
         // Keep a ms counter handy, delta is in seconds
         tick += delta * 1000;
 
@@ -253,7 +242,7 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
                 }
 */
                 // Spawn origin
-/*                Vector3f originPos = entity.getComponent(LocationComponent.class).getWorldPosition();
+                Vector3f originPos = entity.getComponent(LocationComponent.class).getWorldPosition();
 /*
                 TODO: Commented out pending new way of iterating through players, may need a new PlayerComponent attached to player entities
                 // Check for spawning that depends on a player position (like being within a certain range)
@@ -272,8 +261,9 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
                 }
 */
                 //TODO check for bigger creatures and creatures with special needs like biome
+
                 // In case we're doing ranged spawning we might be changing the exact spot to spawn at (otherwise they're the same)
-/*                Vector3f spawnPos = originPos;
+                Vector3f spawnPos = originPos;
                 if (spawnerComp.rangedSpawning) {
 
                     // Add random range on the x and z planes, leave y (height) unchanged for now
@@ -324,7 +314,8 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
 
                 // Now actually pick one of the matching prefabs randomly and that's what we'll try to spawn
                 int anotherRandomIndex = random.nextInt(randomType.size());
-                Prefab chosenPrefab = getRequiredPrefab(randomType, spawnerComp);
+                Object[] randomPrefabs = randomType.toArray();
+                Prefab chosenPrefab = (Prefab) randomPrefabs[anotherRandomIndex];
                 logger.info("Picked index {} of types {} which is a {}, to spawn at {}", anotherRandomIndex, chosenSpawnerType, chosenPrefab, spawnPos);
 
                 // See if the chosen Spawnable has an item it must consume on spawning and if the Spawner can provide it
@@ -375,85 +366,22 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
 
                 // Temp hack - make portal spawned fancy mobs bounce around like idiots too just so they do something
                 // TODO: Change around so the Spawnable defines this
-                /*SimpleAIComponent simpleAIComponent = new SimpleAIComponent();
-                newSpawnableRef.addComponent((simpleAIComponent));
                 //newSpawnableRef.saveComponent(simpleAIComponent);
 
+                IsSpawnedComponent isSpawnedComponent = new IsSpawnedComponent();
+                newSpawnableRef.addComponent(isSpawnedComponent);
 
-*/
-                List<EntityRef> spawnerEntities = Lists.newArrayList();
-
-                for (EntityRef spawner : entityManager.getEntitiesWith(SpawnerComponent.class, LocationComponent.class)) {
-
-                        spawnerEntities.add(spawner);
-                }
-
-                logger.info("Count of valid (also have a Location) Spawner entities: {}", spawnerEntities.size());
-                for (EntityRef entity : spawnerEntities) {
-                    SpawnerComponent spawnerComp = entity.getComponent(SpawnerComponent.class);
-
-                    Vector3f originPos = entity.getComponent(LocationComponent.class).getWorldPosition();
-                    Vector3f spawnPos = originPos;
-
-                    Prefab chosenPrefab = spawnerComp.requiredPrefab;
-                    if(chosenPrefab == null) {
-                        logger.info("Choosing fallback prefab OreonBuilder");
-                        chosenPrefab = prefabManager.getPrefab("Oreons:OreonBuilder");
-                    }
-
-                    String neededItem = chosenPrefab.getComponent(SpawnableComponent.class).itemToConsume;
-                    if (neededItem != null) {
-                        logger.info("This spawnable has an item demand on spawning: {} - Does its spawner have an inventory?", neededItem);
-                        if (entity.hasComponent(InventoryComponent.class)) {
-                            logger.info("Yes - it has an inventory - entity: {}", entity);
-
-                            BlockFamily neededFamily = blockMan.getBlockFamily(neededItem);
-                            logger.info("Needed block family: {}", neededFamily);
-                            // TODO: Improve from current evaluation of the first slot only (ideal for single-slot invs)
-                            // TODO: Also needs to be updated to match recent engine changes, but not really super important ...
-                            //EntityRef firstSlot = invMan.getItemInSlot(entity, 0);
-                            //logger.info("First slot {}", firstSlot);
-
-                            DisplayNameComponent displayName = null; //firstSlot.getComponent(DisplayNameComponent.class);
-                            if (displayName != null) {
-                                logger.info("Got its DisplayName: {}", displayName.name);
-                                if (neededFamily.getDisplayName().equals(displayName.name)) {
-                                    logger.info("Found the item needed to spawn stuff! Decrementing by 1 then spawning");
-
-                                    //EntityRef result = invMan.removeItem(entity, firstSlot, 1);
-                                    //logger.info("Result from decrementing: {}", result);
-                                } else {
-                                    logger.info("But that item didn't match what the spawn needed to consume. No spawn!");
-                                    continue;
-                                }
-                            } else {
-                                continue;
-                            }
-
-                            logger.info("Successfully decremented an existing item stack - accepting item-based spawning");
-                        } else {
-                            logger.info("Nope - no inventory to source material from, cannot spawn that :-(");
-                            continue;
-                        }
-                    }
-
-                    EntityRef newSpawnableRef = entityManager.create(chosenPrefab, spawnPos);
-
-                    SpawnableComponent newSpawnable = newSpawnableRef.getComponent(SpawnableComponent.class);
-                    newSpawnable.parent = entity;
-
-                    IsSpawnedComponent isSpawnedComponent = new IsSpawnedComponent();
-                    newSpawnableRef.addComponent(isSpawnedComponent);
-                //}
+                SpawnableComponent newSpawnable = newSpawnableRef.getComponent(SpawnableComponent.class);
+                newSpawnable.parent = entity;
 
                 // TODO: Use some sort of parent/inheritance thing with gelcubes -> specialized gelcubes
                 // TODO: Introduce proper probability-based spawning
 
             }
 
-/*        } finally {
+        } finally {
             PerformanceMonitor.endActivity();
-        }*/
+        }
     }
 
     /**
@@ -470,5 +398,5 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
         // TODO: Could enhance this further with more suitability like ground below, water/non-water, etc. Just pass the whole prefab in
         return true;
     }
-    
+
 }

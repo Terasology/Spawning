@@ -46,12 +46,10 @@ public class SpawnerComponent implements Component {
     public boolean rangedSpawning;
 
     public int range = 20;
-    public int minDistance = 1;
+    public int minDistance;
     
     public boolean needsPlayer;
 
     public int playerNeedRange = 10000;
-
-    public Prefab requiredPrefab;
     
 }
