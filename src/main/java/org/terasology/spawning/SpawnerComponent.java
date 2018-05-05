@@ -18,6 +18,7 @@ package org.terasology.spawning;
 import org.terasology.entitySystem.Component;
 
 import com.google.common.collect.Lists;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.world.block.ForceBlockActive;
 
 import java.util.List;

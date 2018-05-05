@@ -36,7 +36,6 @@ import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
-import org.terasology.logic.ai.SimpleAIComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 //import org.terasology.logic.inventory.SlotBasedInventoryManager;
 import org.terasology.logic.location.LocationComponent;
@@ -215,7 +214,7 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
                     // TODO Make sure we don't spawn too much stuff. Not very robust yet and doesn't tie mobs to their spawner of origin right
                     //int maxMobs = entityManager.getCountOfEntitiesWith(SpawnerComponent.class) * spawnerComp.maxMobsPerSpawner;
                     //int currentMobs = entityManager.getCountOfEntitiesWith(SimpleAIComponent.class) + entityManager.getCountOfEntitiesWith(HierarchicalAIComponent.class);
-                    int currentMobs = entityManager.getCountOfEntitiesWith(SimpleAIComponent.class);
+                    int currentMobs = entityManager.getCountOfEntitiesWith(IsSpawnedComponent.class);
 
                     logger.info("Mob count: {}/{}", currentMobs, maxMobs);
 
@@ -367,9 +366,10 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
 
                 // Temp hack - make portal spawned fancy mobs bounce around like idiots too just so they do something
                 // TODO: Change around so the Spawnable defines this
-                SimpleAIComponent simpleAIComponent = new SimpleAIComponent();
-                newSpawnableRef.addComponent((simpleAIComponent));
                 //newSpawnableRef.saveComponent(simpleAIComponent);
+
+                IsSpawnedComponent isSpawnedComponent = new IsSpawnedComponent();
+                newSpawnableRef.addComponent(isSpawnedComponent);
 
                 SpawnableComponent newSpawnable = newSpawnableRef.getComponent(SpawnableComponent.class);
                 newSpawnable.parent = entity;
@@ -398,5 +398,5 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
         // TODO: Could enhance this further with more suitability like ground below, water/non-water, etc. Just pass the whole prefab in
         return true;
     }
-    
+
 }
