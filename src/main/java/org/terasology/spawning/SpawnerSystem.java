@@ -158,7 +158,7 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
     public void onSpawn(PeriodicActionTriggeredEvent event, EntityRef spawner) {
         logger.info("Spawner {} is ticking", spawner);
     }
-    
+
     /**
      * Responsible for tick update - see if we should attempt to spawn something
      *
