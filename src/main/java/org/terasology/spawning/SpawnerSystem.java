@@ -158,18 +158,7 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
     public void onSpawn(PeriodicActionTriggeredEvent event, EntityRef spawner) {
         logger.info("Spawner {} is ticking", spawner);
     }
-
-    // TODO: Probably need something better to base this threshold on eventually
-    // TODO: Make sure we don't spawn too much stuff. Not very robust yet and doesn't tie mobs to their spawner of origin right
-    // TODO: Switch away from UpdateSubScriberSystem to the DelaySystem and handle tick "throttle" there. Then simplify
-    // TODO: check for bigger creatures and creatures with special needs like biome
-    // TODO: Commented out until we can detect players in multiplayer better
-    // TODO: Commented out pending new way of iterating through players, may need a new PlayerComponent attached to player entities
-    // TODO: shouldn't use local player, need some way to find nearest player
-    // TODO: Find way for a Spawner to ignore this if it doesn't care about item consumption (even if Spawnable asks)
-    // TODO: Improve from current evaluation of the first slot only (ideal for single-slot invs)
-    // TODO: Also needs to be updated to match recent engine changes, but not really super important ...
-
+    
     /**
      * Responsible for tick update - see if we should attempt to spawn something
      *
