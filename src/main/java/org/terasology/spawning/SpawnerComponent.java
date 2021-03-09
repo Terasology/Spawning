@@ -15,10 +15,9 @@
  */
 package org.terasology.spawning;
 
-import org.terasology.entitySystem.Component;
-
 import com.google.common.collect.Lists;
-import org.terasology.world.block.ForceBlockActive;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.world.block.ForceBlockActive;
 
 import java.util.List;
 
