@@ -20,21 +20,27 @@ public class SpawnerComponent implements Component<SpawnerComponent> {
 
     /** Types of Spawnables this Spawner can spawn */
     public List<String> types = Lists.newArrayList();
-    
+
     public long lastTick;
 
     /** Duration in ms between spawning attempts for this Spawner */
     public int period = 5000;
 
     public int maxMobsPerSpawner = 16;
-    
+
     public boolean rangedSpawning;
 
     public int range = 20;
     public int minDistance;
-    
-    public boolean needsPlayer;
 
-    public int playerNeedRange = 10000;
-    
+    @Override
+    public void copy(SpawnerComponent other) {
+        this.types = Lists.newArrayList(other.types);
+        this.lastTick = other.lastTick;
+        this.period = other.period;
+        this.maxMobsPerSpawner = other.maxMobsPerSpawner;
+        this.rangedSpawning = other.rangedSpawning;
+        this.range = other.range;
+        this.minDistance = other.minDistance;
+    }
 }

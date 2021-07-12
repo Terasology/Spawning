@@ -18,7 +18,7 @@ public class SpawnableComponent implements Component<SpawnableComponent> {
     /** What category is this spawnable. TODO: Change to a set of String "tags" instead ("goblin", "spearman" ... ) */
     public String type = "undefined";
     public Set<String> tags = Collections.emptySet();
-    
+
     /** Weight for how common the spawnable is, from 0-255 with 0 meaning unspawnable and 255 being the most common */
     public byte probability = 1;
 
@@ -27,6 +27,18 @@ public class SpawnableComponent implements Component<SpawnableComponent> {
 
     /** What made this Spawnable? */
     public EntityRef parent =  EntityRef.NULL;
-    
+
+    @Override
+    public void copy(SpawnableComponent other) {
+        this.type = other.type;
+        this.probability = other.probability;
+        this.itemToConsume = other.itemToConsume;
+        this.parent = other.parent;
+
+        this.tags.clear();
+        this.tags.addAll(other.tags);
+
+    }
+
     //TODO add darkness level and biome when map generation has reached better level
 }
