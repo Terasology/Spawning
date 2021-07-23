@@ -17,7 +17,11 @@ package org.terasology.spawning;
 
 import org.terasology.engine.entitySystem.Component;
 
+/**
+ * This component can be attached to animal prefabs to allow them to be spawned. It also stores factors affecting the spawn.
+ */
 public class SpawnableComponent implements Component {
     public int radiusFromPlayer = 0;
     public int spawnGapTime = 30 * 1000; // 30s
+    public String period = "ANY"; // Either "ANY" or "DAY" or "NIGHT"
 }

@@ -11,7 +11,11 @@
     },
     {
         "id": "WildAnimals",
-        "minVersion":"1.1.0"
+        "minVersion":"1.1.0-SNAPSHOT"
+    },
+    {
+        "id": "Behaviors",
+        "minVersion": "1.1.0"
     }
   ],
   "isServerSideOnly": false,
