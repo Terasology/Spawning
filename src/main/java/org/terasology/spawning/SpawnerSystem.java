@@ -49,10 +49,9 @@ public class SpawnerSystem extends BaseComponentSystem {
     public static final String ACTION_ID_PREFIX = "Spawning:";
     public static final BlockUri AIR_ID = new BlockUri(new ResourceUrn("engine:air"));
 
-    private static final String DAY_SPAWN = "DAY";
-    private static final String NIGHT_SPAWN = "NIGHT";
+    private static final SpawnableComponent.PERIOD DAY_SPAWN = SpawnableComponent.PERIOD.Day;
+    private static final SpawnableComponent.PERIOD NIGHT_SPAWN = SpawnableComponent.PERIOD.Night;
     private static final int MAX_HEIGHT_OFFSET = 30;
-
 
     private static final Logger logger = LoggerFactory.getLogger(SpawnerSystem.class);
 
@@ -113,34 +112,47 @@ public class SpawnerSystem extends BaseComponentSystem {
             SpawnableComponent spawnableComponent = entityBuilder.getComponent(SpawnableComponent.class);
 
             // Feature 1 : Period of day
-            if (spawnableComponent.period.trim().equalsIgnoreCase(DAY_SPAWN) && nightTrackerSystem.isNight()) {
-                logger.info("DAY fail");
-                return;
-            }
-            if (spawnableComponent.period.trim().equalsIgnoreCase(NIGHT_SPAWN) && (!nightTrackerSystem.isNight())) {
-                logger.info("NIGHT fail");
+            if (!checkPeriod(spawnableComponent)) {
                 return;
             }
 
             LocationComponent locationComponent = entityBuilder.getComponent(LocationComponent.class);
             Vector3f playerPosition = localPlayer.getPosition(new Vector3f());
-            float v = new FastRandom().nextFloat(0, 1);
-            playerPosition.x += v * spawnableComponent.radiusFromPlayer;
-            playerPosition.z += Math.sqrt(1 - Math.pow(v, 2)) * spawnableComponent.radiusFromPlayer;
+            float v = new FastRandom().nextFloat(-1, 1);
+            float xOffset = v * spawnableComponent.radiusFromPlayer;
+            float v2 = new FastRandom().nextFloat(-1, 1);
+            float zOffest = (float)(v2 * Math.sqrt(1 - Math.pow(v, 2)) * spawnableComponent.radiusFromPlayer);
+            playerPosition.x += xOffset;
+            playerPosition.z += zOffest;
 
             // Look for a spawn position either above or below the chosen spot.
             Vector3f spawnPosition = getGroundHeight(playerPosition);
             if (spawnPosition == null) {
-                logger.info("Failed to find an open position to spawn");
+                logger.warn("Failed to find an open position to spawn");
                 return;
             } else {
                 locationComponent.setWorldPosition(spawnPosition);
                 entityBuilder.saveComponent(locationComponent);
                 entityBuilder.build();
-                logger.info("Found a valid spawn position : ", spawnPosition);
+                logger.debug("Found a valid spawn position : ", spawnPosition);
             }
 
         }
+    }
+
+    private boolean checkPeriod(SpawnableComponent spawnableComponent) {
+
+        if (spawnableComponent.period.equals(DAY_SPAWN) && nightTrackerSystem.isNight()) {
+            logger.info("DAY fail");
+            return false;
+        }
+
+        if (spawnableComponent.period.equals(NIGHT_SPAWN) && (!nightTrackerSystem.isNight())) {
+            logger.info("NIGHT fail");
+            return false;
+        }
+
+        return true;
     }
 
     /**

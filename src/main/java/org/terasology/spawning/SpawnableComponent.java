@@ -23,5 +23,10 @@ import org.terasology.engine.entitySystem.Component;
 public class SpawnableComponent implements Component {
     public int radiusFromPlayer = 0;
     public int spawnGapTime = 30 * 1000; // 30s
-    public String period = "ANY"; // Either "ANY" or "DAY" or "NIGHT"
+    public PERIOD period = PERIOD.Any; // Either "ANY" or "DAY" or "NIGHT"
+    public static enum PERIOD {
+        Any,
+        Day,
+        Night
+    }
 }

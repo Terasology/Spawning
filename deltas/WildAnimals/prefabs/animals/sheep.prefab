@@ -2,6 +2,6 @@
     "Spawnable": {
       "radiusFromPlayer": 15,
       "spawnGapTime": 10000,
-      "period":"NIGHT"
+      "period": NIGHT
     }
 }
