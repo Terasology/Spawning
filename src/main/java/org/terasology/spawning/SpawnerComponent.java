@@ -34,7 +34,7 @@ public class SpawnerComponent implements Component<SpawnerComponent> {
     public int minDistance;
 
     @Override
-    public void copy(SpawnerComponent other) {
+    public void copyFrom(SpawnerComponent other) {
         this.types = Lists.newArrayList(other.types);
         this.lastTick = other.lastTick;
         this.period = other.period;

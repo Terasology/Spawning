@@ -29,7 +29,7 @@ public class SpawnableComponent implements Component<SpawnableComponent> {
     public EntityRef parent =  EntityRef.NULL;
 
     @Override
-    public void copy(SpawnableComponent other) {
+    public void copyFrom(SpawnableComponent other) {
         this.type = other.type;
         this.probability = other.probability;
         this.itemToConsume = other.itemToConsume;
