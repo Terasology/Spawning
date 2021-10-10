@@ -40,7 +40,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.random.FastRandom;
 import org.terasology.engine.world.WorldProvider;
 import org.terasology.engine.world.block.BlockManager;
-import org.terasology.spawning.logic.ai.SimpleAIComponent;
+import org.terasology.spawning.ai.SimpleAIComponent;
 
 import java.util.Collection;
 import java.util.List;

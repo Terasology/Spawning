@@ -1,6 +1,6 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
-package org.terasology.spawning.logic.ai;
+package org.terasology.spawning.ai;
 
 import com.google.common.collect.Iterables;
 import org.terasology.engine.entitySystem.entity.EntityManager;
