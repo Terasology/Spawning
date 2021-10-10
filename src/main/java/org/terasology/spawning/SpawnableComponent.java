@@ -10,8 +10,6 @@ import java.util.Set;
 
 /**
  * Component that enables an entity to be spawned by something.
- *
- * @author Rasmus 'Cervator' Praestholm <cervator@gmail.com>
  */
 public class SpawnableComponent implements Component<SpawnableComponent> {
 
