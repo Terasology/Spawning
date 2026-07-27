@@ -3,4 +3,4 @@
 
 @API package org.terasology.spawning.ai;
 
-import org.terasology.gestalt.module.sandbox.API;
+import org.terasology.context.annotation.API;
